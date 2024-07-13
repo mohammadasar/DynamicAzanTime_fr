@@ -43,8 +43,8 @@
                 </div>
 
             </div>
-            <div class="table-namaz" >
-                <table v-for="(value, index) in namazList" :key="index">
+            <div class="table-namaz" v-for="(value, index) in namazList" :key="index" >
+                <table v-if="value.currentDate ==='2024-07-01' && value.endDate ==='2024-07-07' " >
                     <tr>
                         <td>{{ value.fnamaz }}</td>
                     </tr>
@@ -63,8 +63,8 @@
                 </table>
             </div>
 
-            <div class="table-iquamath">
-                <table v-for="(value, index) in iquamathList" :key="index">
+            <div class="table-iquamath" v-for="(value, index) in namazList" :key="index">
+                <table v-if="value.currentDate ==='2024-07-01' && value.endDate ==='2024-07-07' ">
                     <tr>
                         <td>{{ value.fiquamath }} </td>
                     </tr>
@@ -92,8 +92,8 @@
                     </table>
                 </div>
             </div>
-            <div class="other-time">
-                <table v-for="(value, index) in others" :key="index">
+            <div class="other-time"  v-for="(value, index) in namazList" :key="index">
+                <table v-if="value.currentDate === '2024-07-01' && value.endDate === '2024-07-07' ">
                     <tr>
                         <td>{{ value.sahar }}</td>
                     </tr>
@@ -108,8 +108,8 @@
                     </tr>
                 </table>
             </div>
-            <div class="others1-time">
-                <table v-for="(value, index) in others1" :key="index">
+            <div class="others1-time" v-for="(value, index) in namazList" :key="index">
+                <table v-if="value.currentDate === '2024-07-01' && value.endDate ==='2024-07-07'">
                     <tr>
                         <td>{{ value.israak}}</td>
                     </tr>
@@ -158,13 +158,12 @@ export default {
                 { waqth: 'ifthar' }
             ],
             namazList: [{}],
-            iquamathList: [{}],
-            others: [{}],
-            others1: [{}],
-            idList: [], // Array to hold all ids
+            idList: [{}] , // Array to hold all ids
 
             currentDate: new Date("2024-06-25"),
             EndDate: new Date("2024-07-01"),
+
+            
         }
     },
     computed: {
@@ -173,8 +172,9 @@ export default {
             const day = String(date.getDate()).padStart(2, '0');
             const month = String(date.getMonth() + 1).padStart(2, '0');
             const year = date.getFullYear();
+            console.log("formatedData===========+>",date)
             return `${day}-${month}-${year}`;
-        },
+        },  
         formattedDateEnd() {
             const date = this.EndDate;
             const day = String(date.getDate()).padStart(2, '0');
@@ -184,18 +184,20 @@ export default {
         },
     },
     methods: {
-        addSixDays(id) {
-            this.fetchData(this.idList).then(() => {
-                this.addDaysToEndDate(6);
-                id=this.idList
-                console.log("id================>",id)
-                console.log("EndDate after adding 6 days:", this.EndDate);
-            }).catch(err => {
-                console.error("Error fetching data:", err);
-            });
-
+        addSixDays() {
+            // this.fetchData().then(() => {
+            //     this.addDaysToEndDate(6);
+               
+            //     console.log("id================>",id)
+            //     console.log("EndDate after adding 6 days:", this.EndDate);
+            // }).catch(err => {
+            //     console.error("Error fetching data:", err);
+            // });
+            this.fetchData();
+            this.addDaysToEndDate(6);
             this.currentDate = this.addDays(this.currentDate, 6);
             console.log("currentDate after adding 6 days:", this.currentDate);
+            console.log("EndDate after adding 6 days:", this.EndDate);
 
             
         },
@@ -229,21 +231,17 @@ export default {
                         console.log("data=========", response.data);
 
                         // Assuming response.data is an array of objects with ids
-                        // this.namazList = response.data;
-                        // this.iquamathList = response.data;
-                        // this.others = response.data;
-                        this.others1 = response.data;
+                        this.namazList = response.data;
+                       
+                        
 
                         // Collecting all ids
-                        this.idList = response.data.map(item => item.id);
+                        // this.idList = response.data.map(item => item.id);
 
-                        console.log("idList========>", this.idList);
+                        // console.log("idList========>", this.idList);
                         console.log("namazList========>", this.namazList);
-                        console.log("iquamathList=========>", this.iquamathList);
-                        console.log("others==============>", this.others);
-                        console.log("others1=========>", this.others1);
-                        console.log("currentDate========>", this.currentDate);
-                        console.log("EndDate=========>", this.EndDate);
+        
+                        
 
                         resolve(response);
                     })
@@ -253,9 +251,11 @@ export default {
                     });
             });
         },
+       
     },
     created() {
         this.addSixDays();
+        // this.getId();
     },
 };
 </script>
