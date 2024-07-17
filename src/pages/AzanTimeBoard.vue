@@ -131,9 +131,9 @@
             </div>
 
         </div>
-        <div class="page" style="position: absolute;z-index: 8; right: 20%;">
+        <div class="page" style="position: absolute;z-index: 8; right: 10%;top:15%; background-color: #FFD117;border-radius:5px;border: 1px solid #FFD117;">
             <q-pagination v-model="pagination.page" :max="pageCount" max-pages="7" input
-            input-class="text-orange-10" />
+            input-class="text-blue-grey-10"   color="blue-grey-10"/>
         </div>
     </div>
 
@@ -178,7 +178,6 @@ export default {
     },
     computed: {
       
-
         paginatedItems() {
             const start = (this.pagination.page - 1) * this.pagination.rowsPerPage;
             const end = start + this.pagination.rowsPerPage;
@@ -267,7 +266,8 @@ export default {
     },
     created() {
         this.addSixDays();
-        this.updatePage();
+        // this.updatePage();
+       
     },
 };
 </script>
