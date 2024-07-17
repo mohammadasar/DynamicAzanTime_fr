@@ -5,21 +5,22 @@
         <div class="bg-img">
             <img src="/namaze-bg-1.png">
         </div>
-        <div class="changeDate-btn">
+
+        <!-- <div class="changeDate-btn">
             <q-btn @click="addSixDays()" color="yellow-8" text-color="black">Add 6 Days</q-btn><br>
             <q-btn @click="lessSixDays()" class="q-mt-sm" color="yellow-8" text-color="black">less 6 Days</q-btn>
 
-        </div>
-        <div class="date">
-            <div class="start" style="font-size: 26px; font-weight: 700;background-color: #FFD117;padding: 0px 20px;border: none;border-radius: 10px;">
+        </div> -->
+        <div class="date" v-for="(value, index) in paginatedItems" :key="index">
+            <div class="start"  style="font-size: 26px; font-weight: 700;background-color: #FFD117;padding: 0px 20px;border: none;border-radius: 10px;" >
                 <span>
-                    {{ formattedDate }}
+                    {{ value.currentDate }}
                 </span>
                 <span class="q-ml-md"> Start</span>
             </div>
-            <div class="end q-mt-sm" style="font-size: 26px; font-weight: 700;background-color: #FFD117;padding: 0px 20px;border: none;border-radius: 10px;">
+            <div class="end q-mt-sm"  style="font-size: 26px; font-weight: 700;background-color: #FFD117;padding: 0px 20px;border: none;border-radius: 10px;">
                 <span>
-                    {{ formattedDateEnd }}
+                    {{ value.endDate }}
                 </span>
                 <span class="q-ml-md">End</span>
             </div>
@@ -43,8 +44,8 @@
                 </div>
 
             </div>
-            <div class="table-namaz" v-for="(value, index) in namazList" :key="index" >
-                <table v-if="value.currentDate ==='2024-07-01' && value.endDate ==='2024-07-07' " >
+            <div class="table-namaz" v-for="(value, index) in paginatedItems" :key="index">
+                <table>
                     <tr>
                         <td>{{ value.fnamaz }}</td>
                     </tr>
@@ -63,8 +64,8 @@
                 </table>
             </div>
 
-            <div class="table-iquamath" v-for="(value, index) in namazList" :key="index">
-                <table v-if="value.currentDate ==='2024-07-01' && value.endDate ==='2024-07-07' ">
+            <div class="table-iquamath" v-for="(value, index) in paginatedItems" :key="index">
+                <table >
                     <tr>
                         <td>{{ value.fiquamath }} </td>
                     </tr>
@@ -92,8 +93,8 @@
                     </table>
                 </div>
             </div>
-            <div class="other-time"  v-for="(value, index) in namazList" :key="index">
-                <table v-if="value.currentDate === '2024-07-01' && value.endDate === '2024-07-07' ">
+            <div class="other-time" v-for="(value, index) in paginatedItems" :key="index">
+                <table >
                     <tr>
                         <td>{{ value.sahar }}</td>
                     </tr>
@@ -108,16 +109,16 @@
                     </tr>
                 </table>
             </div>
-            <div class="others1-time" v-for="(value, index) in namazList" :key="index">
-                <table v-if="value.currentDate === '2024-07-01' && value.endDate ==='2024-07-07'">
+            <div class="others1-time" v-for="(value, index) in paginatedItems " :key="index">
+                <table >
                     <tr>
-                        <td>{{ value.israak}}</td>
+                        <td>{{ value.israak }}</td>
                     </tr>
                     <tr>
-                        <td>{{ value.luha}}</td>
+                        <td>{{ value.luha }}</td>
                     </tr>
                     <tr>
-                        <td>{{ value.ifthar}}</td>
+                        <td>{{ value.ifthar }}</td>
                     </tr>
                 </table>
             </div>
@@ -129,6 +130,10 @@
                 </table>
             </div>
 
+        </div>
+        <div class="page" style="position: absolute;z-index: 8; right: 20%;">
+            <q-pagination v-model="pagination.page" :max="pageCount" max-pages="7" input
+            input-class="text-orange-10" />
         </div>
     </div>
 
@@ -153,65 +158,76 @@ export default {
                 { waqth: 'solorpeak' }
             ],
             others1waqth: [
-                { waqth: 'israak' }, 
-                { waqth: 'luha' }, 
+                { waqth: 'israak' },
+                { waqth: 'luha' },
                 { waqth: 'ifthar' }
             ],
             namazList: [{}],
-            idList: [{}] , // Array to hold all ids
 
             currentDate: new Date("2024-06-25"),
             EndDate: new Date("2024-07-01"),
 
-            
+            start: '',
+            End: '',
+            pagination: {
+                page: 1,
+                rowsPerPage: 1,
+            },
+
         }
     },
     computed: {
-        formattedDate() {
-            const date = this.currentDate;
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            console.log("formatedData===========+>",date)
-            return `${day}-${month}-${year}`;
-        },  
-        formattedDateEnd() {
-            const date = this.EndDate;
-            const day = String(date.getDate()).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}-${month}-${year}`;
+      
+
+        paginatedItems() {
+            const start = (this.pagination.page - 1) * this.pagination.rowsPerPage;
+            const end = start + this.pagination.rowsPerPage;
+            const one = this.namazList.slice(start, end);
+            console.log("one==============>", one);
+            return one;
         },
+        pageCount() {
+            const count = Math.ceil(this.namazList.length / this.pagination.rowsPerPage);
+            console.log("count================>", count);
+            return count;
+        }
+
     },
     methods: {
         addSixDays() {
-            // this.fetchData().then(() => {
-            //     this.addDaysToEndDate(6);
-               
-            //     console.log("id================>",id)
-            //     console.log("EndDate after adding 6 days:", this.EndDate);
-            // }).catch(err => {
-            //     console.error("Error fetching data:", err);
-            // });
             this.fetchData();
             this.addDaysToEndDate(6);
             this.currentDate = this.addDays(this.currentDate, 6);
             console.log("currentDate after adding 6 days:", this.currentDate);
             console.log("EndDate after adding 6 days:", this.EndDate);
+            this.start = this.formattedDate;
+            this.End = this.formattedDateEnd;
+            console.log("typeof======", typeof (this.End));
+            console.log("typeof======", typeof (this.start));
+            console.log(" Add start", this.start);
+            console.log(" Add End", this.End);
 
-            
         },
 
         lessSixDays() {
-            this.fetchData().then(() => {
-                this.addDaysToEndDate(-6);
-                console.log("EndDate after subtracting 6 days:", this.EndDate);
-            }).catch(err => {
-                console.error("Error fetching data:", err);
-            });
+            // this.fetchData().then(() => {
+            //     this.addDaysToEndDate(-6);
 
+            // }).catch(err => {
+            //     console.error("Error fetching data:", err);
+            // });
+
+            this.fetchData()
+            this.addDaysToEndDate(-6);
             this.currentDate = this.addDays(this.currentDate, -6);
             console.log("currentDate after subtracting 6 days:", this.currentDate);
+            console.log("EndDate after subtracting 6 days:", this.EndDate);
+
+            this.start = this.formattedDate;
+            this.End = this.formattedDateEnd;
+
+            console.log(" less start", this.start);
+            console.log("less End", this.End);
         },
 
         addDays(date, days) {
@@ -233,15 +249,7 @@ export default {
                         // Assuming response.data is an array of objects with ids
                         this.namazList = response.data;
                        
-                        
-
-                        // Collecting all ids
-                        // this.idList = response.data.map(item => item.id);
-
-                        // console.log("idList========>", this.idList);
                         console.log("namazList========>", this.namazList);
-        
-                        
 
                         resolve(response);
                     })
@@ -251,15 +259,18 @@ export default {
                     });
             });
         },
-       
+        
+        
+        updatePage(page) {
+            this.pagination.page = page;
+        },
     },
     created() {
         this.addSixDays();
-        // this.getId();
+        this.updatePage();
     },
 };
 </script>
-
 
 <style>
 .bg-img img {
