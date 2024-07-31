@@ -11,8 +11,16 @@ const routes = [
     component:() => import('pages/AzanTimeBoard.vue')
   },
   {
-    path:'/rough',
-    component: () => import('components/ExercisePage.vue')
+    path:'/mobile',
+    component: () => import('components/AzanTimeApp.vue')
+  },
+  {
+    path:'/time',
+    component: () => import('components/AzantimeApp2.vue')
+  },
+  {
+    path:'/location',
+    component: () => import('components/LocationFind.vue')
   },
 
   // Always leave this as last one,

@@ -124,7 +124,7 @@
             </div>
             <div class="others1-waqth">
                 <table v-for="(value, index) in others1waqth" :key="index">
-                    <tr>
+                    <tr>     
                         <td>{{ value.waqth }}</td>
                     </tr>
                 </table>
