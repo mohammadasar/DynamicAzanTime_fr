@@ -1,9 +1,7 @@
 <template>
 <div>
-    <h1>Geolocation in Vue.js</h1>
-    <button @click="getLocation">Get Location</button>
-    <div v-if="district">
-        <p>District: {{ district }}</p>
+    <div v-if="district" class="district">
+        <p class="para"><span class="location-icon "><img src="location.png" ></span>{{ district }}</p>
     </div>
     <div v-if="error">
         <p>Error: {{ error }}</p>
@@ -64,11 +62,24 @@ export default {
             }
         },
     },
+    mounted() {
+        this.getLocation();
+    },
 };
 </script>
 
 <style scoped>
 button {
     margin-top: 20px;
+}
+
+.para {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 5px;
+}
+.para img{
+    margin-top: 4px;
 }
 </style>

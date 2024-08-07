@@ -21,6 +21,9 @@ const routes = [
   {
     path:'/location',
     component: () => import('components/LocationFind.vue')
+  }, {
+    path:'/date',
+    component: () => import('components/DynamicDate.vue')
   },
 
   // Always leave this as last one,

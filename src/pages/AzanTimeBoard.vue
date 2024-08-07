@@ -1,5 +1,5 @@
 <template>
-<div class="container">
+<div class="container desktop-only" >
     <div>
 
         <div class="bg-img">
@@ -136,12 +136,22 @@
             input-class="text-blue-grey-10"   color="blue-grey-10"/>
         </div>
     </div>
+    
 
+</div>
+<div class="mobile-only" >
+    <azantime-app2 ></azantime-app2>
 </div>
 </template>
 
 <script>
+  import AzantimeApp2 from 'src/components/AzantimeApp2.vue';
+
 export default {
+    components:{
+        AzantimeApp2,
+    },
+
     data() {
         return {
             waqthList: [
@@ -272,7 +282,7 @@ export default {
 };
 </script>
 
-<style>
+<style >
 .bg-img img {
     position: absolute;
     top: 0;
