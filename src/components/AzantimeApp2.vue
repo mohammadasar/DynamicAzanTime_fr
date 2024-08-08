@@ -18,7 +18,7 @@
 
         </div>
 
-        <div class="date " align="center">
+        <div class="date1" align="center">
             <div class="start">
                 <span class="q-mr-sm calendar"><img src="calendar.png"></span>
                 <span>
@@ -28,19 +28,20 @@
             </div>
 
         </div>
-        <div class="namaz-table">
-            <div class="heading" align="center">
+        <div class="namaz-table1">
+            <div class="heading1" align="center">
 
                 <p><span><img class="q-mt-sm" src="prayer-mat.png" width="40" height="30"></span>
                     <span>Prayer Times</span></p>
             </div>
-            <div class="categories ">
+            <div class="categories1 ">
                 <span>Waqth</span>
                 <span>Namaz</span>
                 <span>Iquamath</span>
             </div>
-            <div class="waqth-list" align="center" v-for="(value, index) in paginatedItems" :key="index">
-                <div class="q-mt-md" >
+            <div class="waqth-list1" align="center" >
+                <div class="q-mt-md" v-for="(value, index) in namazList" :key="index" >
+                    <div  v-if="value.currentDate === this.currentDate" >
                     <div class=" row waqth">
                         <div class="col" align="start" style="color: black;"><span class="q-mr-sm icons"><img src="sunrise.png"></span>FAJR</div>
                         <div class="col time">{{ value.fnamaz }}</div>
@@ -66,13 +67,13 @@
                         <div class="col time">{{ value.inamaz }}</div>
                         <div class="col time">{{ value.iiquamath }}</div>
                     </div>
-
+                 </div>
                 </div>
 
             </div>
 
-            <div class="other-container" v-for="(value, index) in paginatedItems" :key="index">
-                <div class="other" align="center">
+            <div class="other-container" v-for="(value, index) in namazList" :key="index">
+                <div class="other" align="center"  v-if="value.currentDate === this.currentDate " >
                     <div class=" row other-items">
                         <div class="col-7" align="start" style="color: black;font-size: 14px;"><span class="q-mr-sm icon"><img src="night-mode.png" width="20" height="20"></span>SAHAR</div>
                         <div class="col "></div>
@@ -97,8 +98,8 @@
                 </div>
             </div>
 
-            <div class="othersub-container" style="padding-bottom: 100px;">
-                <div class="other-sub" align="center" style="margin-top: 20px;" v-for="(value, index) in paginatedItems" :key="index">
+            <div class="othersub-container" v-for="(value, index) in namazList" :key="index"  >
+                <div class="other-sub" align="center" v-if="value.currentDate === this.currentDate " >
                     <div class=" row other-sub-row">
                         <div class="col-7" align="start" style="color: black;font-size: 14px;"><span class="q-mr-sm icon"><img src="cloudy.png" width="20" height="20"></span>ISRAAH</div>
                         <div class="col "></div>
@@ -119,9 +120,7 @@
             </div>
 
         </div>
-        <div class="page">
-            <q-pagination v-model="pagination.page" :max="pageCount" max-pages="7" input input-class="text-blue-grey-10" color="blue-grey-10" />
-        </div>
+       
     </div>
 
 </div>
@@ -149,22 +148,7 @@ export default {
 
         }
     },
-    computed: {
-
-        paginatedItems() {
-            const start = (this.pagination.page - 1) * this.pagination.rowsPerPage;
-            const end = start + this.pagination.rowsPerPage;
-            const one = this.namazList.slice(start, end);
-            console.log("one==============>", one);
-            return one;
-        },
-        pageCount() {
-            const count = Math.ceil(this.namazList.length / this.pagination.rowsPerPage);
-            console.log("count================>", count);
-            return count;
-        }
-
-    },
+    
     methods: {
         fetchData() {
             return new Promise((resolve, reject) => {
@@ -175,7 +159,7 @@ export default {
                         // Assuming response.data is an array of objects with ids
                         this.namazList = response.data;
 
-
+                          console.log("date=====",this.currentDate)
                         resolve(response);
                     })
                     .catch((err) => {
@@ -214,9 +198,9 @@ export default {
 </script>
 
 <style>
-@media screen and (max-device-width: 425px) {
+@media screen and (max-device-width: 430px) {
 
-    .heading {
+    .heading1 {
 
         color: white;
         width: 100%;
@@ -225,7 +209,7 @@ export default {
 
     }
 
-    .heading p {
+    .heading1 p {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -238,7 +222,7 @@ export default {
 
     }
 
-    .categories {
+    .categories1 {
         display: flex;
         flex-direction: row;
         width: 100%;
@@ -248,7 +232,7 @@ export default {
 
     }
 
-    .categories span {
+    .categories1 span {
         font-size: 4vw;
         font-weight: 700;
         background-color: white;
@@ -258,7 +242,7 @@ export default {
         color: #1A237E;
     }
 
-    .waqth-list {
+    .waqth-list1 {
         position: relative;
         font-size: 3.7vw;
         font-weight: 900;
@@ -321,7 +305,7 @@ export default {
 
     }
 
-    .date {
+    .date1 {
         position: relative;
         color: black;
 
@@ -338,7 +322,7 @@ export default {
         display: flex;
         flex-direction: row;
         align-items: center;
-        justify-content: center;
+        justify-content: space-around;
 
     }
 
@@ -368,6 +352,7 @@ export default {
         position: relative;
         background-color: #0755B1;
         background-image: linear-gradient(-90deg, #0755B1, #46BBD8);
+        padding-bottom: 50px;
 
     }
 
@@ -394,6 +379,7 @@ export default {
     .other-sub {
         font-size: 3.7vw;
         font-weight: 700;
+        margin-top: 20px;
     }
 
     .other-sub-row {
@@ -411,45 +397,10 @@ export default {
 
     }
 
-    .page {
-        position: absolute;
-        z-index: 8;
-        right: 30%;
-        bottom: 4%;
-        background-color: #FFD117;
-        border-radius: 5px;
-        border: 1px solid #FFD117;
-
-    }
-
-    .page q-pagination {
-        font-size: 10px;
-    }
-}
-
-.namaz-table {
-    position: relative;
+    
+    
 
 }
 
-.waqth-table {
-    width: 412px;
-}
 
-.other-waqth {
-
-    margin-top: 8px;
-    font-size: 16px;
-    font-weight: 800;
-    color: black;
-    letter-spacing: 1px;
-}
-
-.other-time {
-    margin-top: 8px;
-    font-size: 16px;
-    font-weight: 800;
-    color: white;
-
-}
 </style>

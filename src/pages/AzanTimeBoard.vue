@@ -1,5 +1,5 @@
 <template>
-<div class="container desktop-only" >
+<div class="container mobile-hide" >
     <div>
 
         <div class="bg-img">
